@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Migunani QR Platform",
+  title: "Dynamic QR Platform",
   description: "Create, manage, and track your dynamic QR codes instantly.",
 };
 
