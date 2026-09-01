@@ -10,6 +10,7 @@ import { ArrowLeft, Download, Edit, Pause, Play, Trash, ExternalLink } from "luc
 import { changeQRStatus, deleteQRCode } from "../actions"
 import { OverviewChart } from "@/components/overview-chart"
 import QRCodePreview from "@/components/qrcode-preview"
+import { ShareAnalyticsButton } from "@/components/share-analytics-button"
 
 export default async function QRDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const resolvedParams = await params
@@ -71,6 +72,7 @@ export default async function QRDetailPage({ params }: { params: Promise<{ id: s
           </div>
         </div>
         <div className="flex items-center gap-2">
+          <ShareAnalyticsButton shortCode={qr.shortCode} />
           <Link href={`/dashboard/qr/${qr.id}/edit`} className={buttonVariants({ variant: "outline" })}>
             <Edit className="mr-2 h-4 w-4" /> Edit
           </Link>

@@ -10,12 +10,13 @@ export default auth((req) => {
   const isDashboardRoute = nextUrl.pathname.startsWith("/dashboard")
   const isAuthRoute = nextUrl.pathname.startsWith("/login")
   const isRedirectRoute = nextUrl.pathname.startsWith("/r/")
+  const isStatsRoute = nextUrl.pathname.startsWith("/stats/")
 
   // Allow next-auth API routes
   if (isApiAuthRoute) return;
 
   // Let the QR redirect route and other public routes pass
-  if (isRedirectRoute) return;
+  if (isRedirectRoute || isStatsRoute) return;
 
   // Protect dashboard routes
   if (isDashboardRoute && !isLoggedIn) {
