@@ -9,12 +9,13 @@ import Link from "next/link"
 import { ArrowLeft } from "lucide-react"
 import { updateQRCode } from "../../actions"
 
-export default async function EditQRCodePage({ params }: { params: { id: string } }) {
+export default async function EditQRCodePage({ params }: { params: Promise<{ id: string }> }) {
+  const resolvedParams = await params
   const session = await auth()
   if (!session?.user?.id) return null
 
   const qr = await prisma.qRCode.findUnique({
-    where: { id: params.id, userId: session.user.id }
+    where: { id: resolvedParams.id, userId: session.user.id }
   })
 
   if (!qr) notFound()

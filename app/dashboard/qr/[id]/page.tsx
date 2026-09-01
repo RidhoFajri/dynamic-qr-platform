@@ -11,12 +11,13 @@ import { changeQRStatus, deleteQRCode } from "../actions"
 import { OverviewChart } from "@/components/overview-chart"
 import QRCodePreview from "@/components/qrcode-preview"
 
-export default async function QRDetailPage({ params }: { params: { id: string } }) {
+export default async function QRDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const resolvedParams = await params
   const session = await auth()
   if (!session?.user?.id) return null
 
   const qr = await prisma.qRCode.findUnique({
-    where: { id: params.id, userId: session.user.id },
+    where: { id: resolvedParams.id, userId: session.user.id },
     include: {
       scanEvents: {
         orderBy: { scannedAt: 'desc' }
