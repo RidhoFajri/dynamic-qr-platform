@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse, unstable_after as after } from "next/server"
+import { NextRequest, NextResponse, after } from "next/server"
 import prisma from "@/lib/prisma"
 import crypto from "crypto"
 import { UAParser } from "ua-parser-js"
