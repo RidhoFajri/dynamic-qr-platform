@@ -55,10 +55,10 @@ export function QRListActions({ qr }: { qr: { id: string, status: string } }) {
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
         <DropdownMenuLabel>Actions</DropdownMenuLabel>
-        <DropdownMenuItem render={<Link href={`/dashboard/qr/${qr.id}`} />}>
+        <DropdownMenuItem onClick={() => router.push(`/dashboard/qr/${qr.id}`)}>
           <BarChart2 className="mr-2 h-4 w-4" /> Analytics
         </DropdownMenuItem>
-        <DropdownMenuItem render={<Link href={`/dashboard/qr/${qr.id}/edit`} />}>
+        <DropdownMenuItem onClick={() => router.push(`/dashboard/qr/${qr.id}/edit`)}>
           <Settings className="mr-2 h-4 w-4" /> Edit
         </DropdownMenuItem>
         <DropdownMenuSeparator />
