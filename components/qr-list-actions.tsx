@@ -7,6 +7,7 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
+  DropdownMenuGroup,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
@@ -54,31 +55,33 @@ export function QRListActions({ qr }: { qr: { id: string, status: string } }) {
         <MoreVertical className="h-4 w-4" />
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        <DropdownMenuLabel>Actions</DropdownMenuLabel>
-        <DropdownMenuItem onClick={() => router.push(`/dashboard/qr/${qr.id}`)}>
-          <BarChart2 className="mr-2 h-4 w-4" /> Analytics
-        </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => router.push(`/dashboard/qr/${qr.id}/edit`)}>
-          <Settings className="mr-2 h-4 w-4" /> Edit
-        </DropdownMenuItem>
-        <DropdownMenuSeparator />
-        
-        {qr.status === "ACTIVE" ? (
-          <DropdownMenuItem onClick={() => handleStatusChange("PAUSED")}>
-            <Pause className="mr-2 h-4 w-4" /> Pause QR
+        <DropdownMenuGroup>
+          <DropdownMenuLabel>Actions</DropdownMenuLabel>
+          <DropdownMenuItem onClick={() => router.push(`/dashboard/qr/${qr.id}`)}>
+            <BarChart2 className="mr-2 h-4 w-4" /> Analytics
           </DropdownMenuItem>
-        ) : (
-          <DropdownMenuItem onClick={() => handleStatusChange("ACTIVE")}>
-            <Play className="mr-2 h-4 w-4" /> Activate QR
+          <DropdownMenuItem onClick={() => router.push(`/dashboard/qr/${qr.id}/edit`)}>
+            <Settings className="mr-2 h-4 w-4" /> Edit
           </DropdownMenuItem>
-        )}
-        
-        <DropdownMenuItem 
-          onClick={handleDelete}
-          variant="destructive"
-        >
-          <Trash className="mr-2 h-4 w-4" /> Delete QR
-        </DropdownMenuItem>
+          <DropdownMenuSeparator />
+          
+          {qr.status === "ACTIVE" ? (
+            <DropdownMenuItem onClick={() => handleStatusChange("PAUSED")}>
+              <Pause className="mr-2 h-4 w-4" /> Pause QR
+            </DropdownMenuItem>
+          ) : (
+            <DropdownMenuItem onClick={() => handleStatusChange("ACTIVE")}>
+              <Play className="mr-2 h-4 w-4" /> Activate QR
+            </DropdownMenuItem>
+          )}
+          
+          <DropdownMenuItem 
+            onClick={handleDelete}
+            variant="destructive"
+          >
+            <Trash className="mr-2 h-4 w-4" /> Delete QR
+          </DropdownMenuItem>
+        </DropdownMenuGroup>
       </DropdownMenuContent>
     </DropdownMenu>
   )
