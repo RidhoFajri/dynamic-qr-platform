@@ -72,6 +72,9 @@ export default async function QRDetailPage({ params }: { params: Promise<{ id: s
           </div>
         </div>
         <div className="flex items-center gap-2">
+          <a href={`/api/qr/${qr.id}/export`} className={buttonVariants({ variant: "outline" })}>
+            <Download className="mr-2 h-4 w-4" /> Export CSV
+          </a>
           <ShareAnalyticsButton shortCode={qr.shortCode} />
           <Link href={`/dashboard/qr/${qr.id}/edit`} className={buttonVariants({ variant: "outline" })}>
             <Edit className="mr-2 h-4 w-4" /> Edit
