@@ -6,6 +6,7 @@ import prisma from "@/lib/prisma"
 import { auth } from "@/auth"
 import Link from "next/link"
 import { format } from "date-fns"
+import { LocalTime } from "@/components/local-time"
 import { Plus } from "lucide-react"
 import { changeQRStatus, deleteQRCode } from "./actions"
 import { QRListActions } from "@/components/qr-list-actions"
@@ -73,8 +74,10 @@ export default async function QRListPage() {
                     </Badge>
                   </TableCell>
                   <TableCell>{qr._count.scanEvents}</TableCell>
-                  <TableCell className="text-muted-foreground">
-                    {format(qr.createdAt, 'MMM d, yyyy')}
+                  <TableCell>
+                    <div className="text-muted-foreground">
+                      <LocalTime date={qr.createdAt} formatStr="MMM d, yyyy" />
+                    </div>
                   </TableCell>
                   <TableCell className="text-right">
                     <QRListActions qr={qr} />

@@ -3,6 +3,7 @@ import prisma from "@/lib/prisma"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { format } from "date-fns"
+import { LocalTime } from "@/components/local-time"
 import { ExternalLink, BarChart3 } from "lucide-react"
 
 export default async function PublicAnalyticsPage({ params }: { params: Promise<{ shortCode: string }> }) {
@@ -86,7 +87,7 @@ export default async function PublicAnalyticsPage({ params }: { params: Promise<
                 )}
                 <div>
                   <div className="font-medium">Created At</div>
-                  <div className="text-muted-foreground">{format(qr.createdAt, 'PPp')}</div>
+                  <div className="text-muted-foreground"><LocalTime date={qr.createdAt} formatStr="PPp" /></div>
                 </div>
               </CardContent>
             </Card>
@@ -175,7 +176,7 @@ export default async function PublicAnalyticsPage({ params }: { params: Promise<
                         </span>
                       </div>
                       <div className="text-xs text-muted-foreground text-right">
-                        {format(scan.scannedAt, 'MMM d, h:mm a')}
+                        <LocalTime date={scan.scannedAt} formatStr="MMM d, h:mm a" />
                         <div className="text-[10px] mt-0.5 capitalize">
                           {scan.isBot ? "Bot" : "Human"}
                         </div>

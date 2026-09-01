@@ -6,6 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge"
 import Link from "next/link"
 import { format } from "date-fns"
+import { LocalTime } from "@/components/local-time"
 import { ArrowLeft, Download, Edit, Pause, Play, Trash, ExternalLink } from "lucide-react"
 import { changeQRStatus, deleteQRCode } from "../actions"
 import { OverviewChart } from "@/components/overview-chart"
@@ -132,12 +133,12 @@ export default async function QRDetailPage({ params }: { params: Promise<{ id: s
               )}
               <div>
                 <div className="font-medium">Created At</div>
-                <div className="text-muted-foreground">{format(qr.createdAt, 'PPp')}</div>
+                <div className="text-muted-foreground"><LocalTime date={qr.createdAt} formatStr="PPp" /></div>
               </div>
               {qr.expiresAt && (
                 <div>
                   <div className="font-medium">Expires At</div>
-                  <div className="text-muted-foreground">{format(qr.expiresAt, 'PPp')}</div>
+                  <div className="text-muted-foreground"><LocalTime date={qr.expiresAt} formatStr="PPp" /></div>
                 </div>
               )}
             </CardContent>
@@ -227,7 +228,7 @@ export default async function QRDetailPage({ params }: { params: Promise<{ id: s
                       </span>
                     </div>
                     <div className="text-xs text-muted-foreground text-right">
-                      {format(scan.scannedAt, 'MMM d, h:mm a')}
+                      <LocalTime date={scan.scannedAt} formatStr="MMM d, h:mm a" />
                       <div className="text-[10px] mt-0.5 capitalize">
                         {scan.isBot ? "Bot" : "Human"}
                       </div>
