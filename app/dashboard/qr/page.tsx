@@ -6,16 +6,9 @@ import prisma from "@/lib/prisma"
 import { auth } from "@/auth"
 import Link from "next/link"
 import { format } from "date-fns"
-import { Plus, BarChart2, MoreVertical, Pause, Play, Trash, Settings } from "lucide-react"
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+import { Plus } from "lucide-react"
 import { changeQRStatus, deleteQRCode } from "./actions"
+import { QRListActions } from "@/components/qr-list-actions"
 
 export default async function QRListPage() {
   const session = await auth()
@@ -84,49 +77,7 @@ export default async function QRListPage() {
                     {format(qr.createdAt, 'MMM d, yyyy')}
                   </TableCell>
                   <TableCell className="text-right">
-                    <DropdownMenu>
-                      <DropdownMenuTrigger className={buttonVariants({ variant: "ghost", className: "h-8 w-8 p-0" })}>
-                        <span className="sr-only">Open menu</span>
-                        <MoreVertical className="h-4 w-4" />
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end">
-                        <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                        <DropdownMenuItem render={<Link href={`/dashboard/qr/${qr.id}`} />}>
-                          <BarChart2 className="mr-2 h-4 w-4" /> Analytics
-                        </DropdownMenuItem>
-                        <DropdownMenuItem render={<Link href={`/dashboard/qr/${qr.id}/edit`} />}>
-                          <Settings className="mr-2 h-4 w-4" /> Edit
-                        </DropdownMenuItem>
-                        <DropdownMenuSeparator />
-                        {qr.status === "ACTIVE" ? (
-                          <form action={async () => {
-                            "use server"
-                            await changeQRStatus(qr.id, "PAUSED")
-                          }}>
-                            <button type="submit" className="w-full flex items-center px-2 py-1.5 text-sm outline-none transition-colors focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50 hover:bg-accent rounded-sm">
-                              <Pause className="mr-2 h-4 w-4" /> Pause QR
-                            </button>
-                          </form>
-                        ) : (
-                          <form action={async () => {
-                            "use server"
-                            await changeQRStatus(qr.id, "ACTIVE")
-                          }}>
-                            <button type="submit" className="w-full flex items-center px-2 py-1.5 text-sm outline-none transition-colors focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50 hover:bg-accent rounded-sm">
-                              <Play className="mr-2 h-4 w-4" /> Activate QR
-                            </button>
-                          </form>
-                        )}
-                        <form action={async () => {
-                          "use server"
-                          await deleteQRCode(qr.id)
-                        }}>
-                          <button type="submit" className="w-full flex items-center px-2 py-1.5 text-sm text-destructive outline-none transition-colors focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50 hover:bg-accent hover:text-destructive rounded-sm">
-                            <Trash className="mr-2 h-4 w-4" /> Delete QR
-                          </button>
-                        </form>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
+                    <QRListActions qr={qr} />
                   </TableCell>
                 </TableRow>
               ))}
