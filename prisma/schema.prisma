@@ -1,0 +1,58 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String    @unique
+  passwordHash  String?
+  image         String?
+  qrCodes       QRCode[]
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+}
+
+model QRCode {
+  id             String      @id @default(cuid())
+  userId         String
+  user           User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name           String
+  description    String?
+  shortCode      String      @unique
+  destinationUrl String
+  status         String      @default("ACTIVE") // ACTIVE, PAUSED, EXPIRED, ARCHIVED
+  expiresAt      DateTime?
+  scanEvents     ScanEvent[]
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
+
+  @@index([userId])
+}
+
+model ScanEvent {
+  id             String   @id @default(cuid())
+  qrCodeId       String
+  qrCode         QRCode   @relation(fields: [qrCodeId], references: [id], onDelete: Cascade)
+  visitorHash    String   // Hashed visitor identifier
+  city           String?
+  region         String?
+  country        String?
+  countryCode    String?
+  deviceType     String?  // Desktop, Mobile, Tablet, Bot
+  browser        String?
+  os             String?
+  referrer       String?
+  ipHash         String?  // Anonymized/Hashed IP
+  isBot          Boolean  @default(false)
+  scannedAt      DateTime @default(now())
+
+  @@index([qrCodeId, scannedAt])
+  @@index([qrCodeId, visitorHash])
+}
