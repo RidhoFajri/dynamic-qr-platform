@@ -36,7 +36,7 @@ export default async function QRDetailPage({ params }: { params: Promise<{ id: s
 
   // Location Aggregation
   const locationMap = qr.scanEvents.reduce((acc, curr) => {
-    const loc = curr.city ? `${curr.city}, ${curr.country}` : 'Unknown'
+    const loc = curr.city ? `${curr.city}, ${curr.country}` : (curr.country || 'Unknown')
     acc[loc] = (acc[loc] || 0) + 1
     return acc
   }, {} as Record<string, number>)
@@ -220,7 +220,7 @@ export default async function QRDetailPage({ params }: { params: Promise<{ id: s
                   <div key={scan.id} className="flex items-center justify-between border-b pb-2 last:border-0 last:pb-0">
                     <div className="flex flex-col">
                       <span className="text-sm font-medium">
-                        {scan.city ? `${scan.city}, ${scan.country}` : 'Unknown Location'}
+                        {scan.city ? `${scan.city}, ${scan.country}` : (scan.country || 'Unknown Location')}
                       </span>
                       <span className="text-xs text-muted-foreground">
                         {scan.browser} on {scan.os}
