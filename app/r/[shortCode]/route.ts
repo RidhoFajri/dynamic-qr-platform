@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from "next/server"
+import { NextRequest, NextResponse, unstable_after as after } from "next/server"
 import prisma from "@/lib/prisma"
 import crypto from "crypto"
 import { UAParser } from "ua-parser-js"
@@ -29,7 +29,7 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ shor
 
   // --- 1. Identity & Visitor Hash ---
   let visitorId = req.cookies.get("visitor_id")?.value
-  const response = NextResponse.redirect(qr.destinationUrl, 307)
+  const response = NextResponse.redirect(qr.destinationUrl, 302)
   
   if (!visitorId) {
     visitorId = crypto.randomUUID()
@@ -87,26 +87,29 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ shor
   // Note: Vercel serverless functions might terminate immediately after response is returned.
   // In Next.js 14/15, using `waitUntil` (or experimentally `after`) is ideal.
   // We'll await it here for simplicity and safety across all providers, but keep it fast.
-  try {
-    await prisma.scanEvent.create({
-      data: {
-        qrCodeId: qr.id,
-        visitorHash,
-        city,
-        region,
-        country,
-        countryCode,
-        deviceType,
-        browser,
-        os,
-        referrer,
-        ipHash,
-        isBot: isBotRequest
-      }
-    })
-  } catch (error) {
-    console.error("Failed to record scan event", error)
-  }
+  // Use Next.js after() to run the DB write in the background without blocking the redirect
+  after(async () => {
+    try {
+      await prisma.scanEvent.create({
+        data: {
+          qrCodeId: qr.id,
+          visitorHash,
+          city,
+          region,
+          country,
+          countryCode,
+          deviceType,
+          browser,
+          os,
+          referrer,
+          ipHash,
+          isBot: isBotRequest
+        }
+      })
+    } catch (error) {
+      console.error("Failed to record scan event", error)
+    }
+  })
 
   return response
 }
